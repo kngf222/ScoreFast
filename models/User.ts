@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import toJSON from './plugins/toJSON';
+import mongoose from "mongoose";
+import toJSON from "./plugins/toJSON";
 
 // USER SCHEMA
 const userSchema = new mongoose.Schema(
@@ -21,15 +21,20 @@ const userSchema = new mongoose.Schema(
     customerId: {
       type: String,
       validate(value: string) {
-        return value.includes('cus_');
+        return value.includes("cus_");
       },
     },
     // Used in the Stripe webhook. should match a plan in config.js file.
     priceId: {
       type: String,
       validate(value: string) {
-        return value.includes('price_');
+        return value.includes("price_");
       },
+    },
+    // Used to determine if the user has access to the product—it's turn on/off by the Stripe webhook
+    hasAccess: {
+      type: Boolean,
+      default: false,
     },
   },
   {
@@ -41,4 +46,4 @@ const userSchema = new mongoose.Schema(
 // add plugin that converts mongoose to json
 userSchema.plugin(toJSON);
 
-export default mongoose.models.User || mongoose.model('User', userSchema);
+export default mongoose.models.User || mongoose.model("User", userSchema);
