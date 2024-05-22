@@ -27,7 +27,7 @@ model Set {
   matchId Int
   match   Match    @relation(fields: [matchId], references: [id])
   scores  Score[]
-
+  
   @@schema("public")
 }
 
@@ -37,7 +37,7 @@ model Team {
   player2  String?
   matches1 Match[]  @relation(name: "Team1")
   matches2 Match[]  @relation(name: "Team2")
-
+  
   @@schema("public")
 }
 
@@ -47,7 +47,7 @@ model Score {
   set     Set      @relation(fields: [setId], references: [id])
   team1Score Int
   team2Score Int
-
+  
   @@schema("public")
 }
 
@@ -57,6 +57,6 @@ model UserProfile {
   email      String?
   created_at DateTime @default(now())
   matches    Match[]  @relation(name: "UserMatches")
-
+  
   @@schema("public")
 }
