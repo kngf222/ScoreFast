@@ -13,7 +13,16 @@ model Match {
   player2   String
   score1    Int
   score2    Int
+  sets      Set[]
   histories History[]
+}
+
+model Set {
+  id        Int      @id @default(autoincrement())
+  matchId   Int
+  score1    Int
+  score2    Int
+  Match     Match    @relation(fields: [matchId], references: [id])
 }
 
 model History {
