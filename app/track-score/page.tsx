@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
+import { useSession, signIn } from 'next-auth/react';
+
 
 const TrackScore = () => {
   const [player1, setPlayer1] = useState('');

@@ -1,16 +1,17 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 import prisma from '../../../../libs/prismaClient';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { matchID } = req.query;
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const matchID = url.searchParams.get('matchID');
 
   if (!matchID) {
-    return res.status(400).json({ error: 'matchId is required' });
+    return NextResponse.json({ error: 'matchId is required' }, { status: 400 });
   }
 
   try {
     const match = await prisma.match.findUnique({
-      where: { id: parseInt(matchID as string, 10) },
+      where: { id: parseInt(matchID, 10) },
       include: {
         sets: {
           include: { scores: true },
@@ -22,11 +23,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     if (!match) {
-      return res.status(404).json({ error: 'Match not found' });
+      return NextResponse.json({ error: 'Match not found' }, { status: 404 });
     }
 
-    res.status(200).json(match);
+    return NextResponse.json(match, { status: 200 });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch match' });
+    console.error('Failed to fetch match:', error);
+    return NextResponse.json({ error: 'Failed to fetch match' }, { status: 500 });
   }
 }
