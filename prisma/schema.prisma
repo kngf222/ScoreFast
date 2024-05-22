@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Match {
+  id        Int       @id @default(autoincrement())
+  player1   String
+  player2   String
+  score1    Int
+  score2    Int
+  histories History[]
+}
+
+model History {
+  id        Int      @id @default(autoincrement())
+  matchId   Int
+  player    String
+  newScore  Int
+  timestamp DateTime @default(now())
+  Match     Match    @relation(fields: [matchId], references: [id])
+}

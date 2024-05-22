@@ -22,11 +22,10 @@ const Hero = () => {
         </a>
 
         <h1 className="font-extrabold text-4xl lg:text-6xl tracking-tight md:-mb-4">
-          Ship your startup in days, not weeks
+          Track and share your match in a tap
         </h1>
         <p className="text-lg opacity-80 leading-relaxed">
-          The NextJS boilerplate with all you need to build your SaaS, AI tool,
-          or any other web app. From idea to production in 5 minutes.
+          Entering scores & sharing them should be easy. Enter the set score. Share a link. That's it. No more texting dozens of score updates. No more waiting for the final score. No more confusion.
         </p>
         <button className="btn btn-primary btn-wide">
           Get {config.appName}
