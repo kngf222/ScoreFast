@@ -37,10 +37,10 @@ export default function MatchPage() {
       if (matchId) {
         console.log(`Fetching match data for matchId: ${matchId}`);
         try {
-          console.log('Sending request to /api/get_match');
+          console.log('Sending request to /api/match');
           console.log('matchId:', matchId);
-          console.log(`/api/get_match/${matchId}`);
-          const response = await axios.get(`/api/get_match/${matchId}`);
+          console.log(`/api/match/${matchId}`);
+          const response = await axios.get(`/api/match/${matchId}`);
           console.log('Match data received:', response.data);
           setMatch(response.data);
         } catch (error) {

@@ -17,7 +17,7 @@ const TrackScore = () => {
 
   const startMatch = async () => {
     try {
-      const response = await axios.post('/api/start_match', { player1, player2, player3, player4, userId });
+      const response = await axios.post('/api/match/start_match', { player1, player2, player3, player4, userId });
       setMatchId(response.data.matchId);
       setScore1(0);
       setScore2(0);
@@ -35,10 +35,10 @@ const TrackScore = () => {
     try {
       const setId = 1; // You need to determine the current set ID dynamically
       if (team === 'team1') {
-        await axios.post('/api/update_score', { matchId, setId, team1Score: newScore, team2Score: score2 });
+        await axios.post('/api/match/update_score', { matchId, setId, team1Score: newScore, team2Score: score2 });
         setScore1(newScore);
       } else {
-        await axios.post('/api/update_score', { matchId, setId, team1Score: score1, team2Score: newScore });
+        await axios.post('/api/match/update_score', { matchId, setId, team1Score: score1, team2Score: newScore });
         setScore2(newScore);
       }
     } catch (error) {
