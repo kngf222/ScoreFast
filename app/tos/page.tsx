@@ -5,22 +5,22 @@ import config from "@/config";
 // CHATGPT PROMPT TO GENERATE YOUR TERMS & SERVICES — replace with your own data 👇
 
 // 1. Go to https://chat.openai.com/
-// 2. Copy paste bellow
+// 2. Copy paste below
 // 3. Replace the data with your own (if needed)
 // 4. Paste the answer from ChatGPT directly in the <pre> tag below
 
 // You are an excellent lawyer.
 
 // I need your help to write a simple Terms & Services for my website. Here is some context:
-// - Website: https://shipfa.st
-// - Name: ShipFast
-// - Contact information: marc@shipfa.st
-// - Description: A JavaScript code boilerplate to help entrepreneurs launch their startups faster
-// - Ownership: when buying a package, users can download code to create apps. They own the code but they do not have the right to resell it. They can ask for a full refund within 7 day after the purchase.
-// - User data collected: name, email and payment information
+// - Website: https://scorefast.xyz
+// - Name: ScoreFast
+// - Contact information: jibrandoesthings@gmail.com
+// - Description: The fastest and simplest way to score your tennis or pickleball match and share it live with friends.
+// - Ownership: when buying access to the score tracker, users will have access to it. They do not own the match tracker and do not have the right to clone the code and resell it.
+// - User data collected: name, email, phone number and payment information
 // - Non-personal data collection: web cookies
-// - Link to privacy-policy: https://shipfa.st/privacy-policy
-// - Governing Law: France
+// - Link to privacy-policy: https://scorefast.xyz/privacy-policy
+// - Governing Law: United States of America
 // - Updates to the Terms: users will be updated by email
 
 // Please write a simple Terms & Services for my site. Add the current date. Do not add or explain your reasoning. Answer:
@@ -57,39 +57,38 @@ const TOS = () => {
           className="leading-relaxed whitespace-pre-wrap"
           style={{ fontFamily: "sans-serif" }}
         >
-          {`Last Updated: September 26, 2023
+          {`Effective Date: May 22, 2024
 
-Welcome to ShipFast!
+Welcome to ScoreFast! By accessing or using our website (https://scorefast.xyz), you agree to be bound by these Terms & Services.
 
-These Terms of Service ("Terms") govern your use of the ShipFast website at https://shipfa.st ("Website") and the services provided by ShipFast. By using our Website and services, you agree to these Terms.
+1. Description of Service
+ScoreFast provides the fastest and simplest way to score your tennis or pickleball match and share it live with friends.
 
-1. Description of ShipFast
+2. Ownership and Access
+When you purchase access to the ScoreFast score tracker, you are granted a license to use the service. You do not own the match tracker and do not have the right to clone the code or resell it.
 
-ShipFast is a platform that offers a JavaScript code boilerplate to assist entrepreneurs in launching their startups more efficiently.
+3. User Data Collection
+We collect the following personal information:
 
-2. Ownership and Usage Rights
+	•	Name
+	•	Email
+	•	Phone number
+	•	Payment information
 
-When you purchase a package from ShipFast, you gain the right to download and use the code provided for creating applications. You own the code you create but do not have the right to resell it. We offer a full refund within 7 days of purchase, as specified in our refund policy.
+We also collect non-personal data through web cookies. For more information, please review our Privacy Policy at Privacy Policy.
 
-3. User Data and Privacy
+4. Governing Law
+These terms shall be governed and construed in accordance with the laws of the United States of America.
 
-We collect and store user data, including name, email, and payment information, as necessary to provide our services. For details on how we handle your data, please refer to our Privacy Policy at https://shipfa.st/privacy-policy.
+5. Updates to Terms
+We may update these Terms & Services from time to time. Users will be notified of any changes via email.
 
-4. Non-Personal Data Collection
+6. Contact Information
+If you have any questions about these Terms & Services, please contact us at jibrandoesthings@gmail.com.
 
-We use web cookies to collect non-personal data for the purpose of improving our services and user experience.
+Thank you for using ScoreFast!
 
-5. Governing Law
-
-These Terms are governed by the laws of France.
-
-6. Updates to the Terms
-
-We may update these Terms from time to time. Users will be notified of any changes via email.
-
-For any questions or concerns regarding these Terms of Service, please contact us at marc@shipfa.st.
-
-Thank you for using ShipFast!`}
+ScoreFast Team`}
         </pre>
       </div>
     </main>

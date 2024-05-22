@@ -16,15 +16,11 @@ const TrackScore = () => {
   const [score2, setScore2] = useState(0);
   const [matchId, setMatchId] = useState<number | null>(null);
   const [matchUrl, setMatchUrl] = useState<string | null>(null);
-  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      setShowLoginPrompt(true);
-    } else {
-      setShowLoginPrompt(false);
-    }
-  }, [status]);
+    console.log('Session status:', status);
+    console.log('Session data:', session);
+  }, [status, session]);
 
   const startMatch = async () => {
     if (!session || !session.user?.id) {
@@ -66,16 +62,21 @@ const TrackScore = () => {
     return <div>Loading...</div>;
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-500 via-green-400 to-purple-500 text-white p-6 flex items-center justify-center">
-      {showLoginPrompt && (
+  if (status === 'unauthenticated') {
+    return (
+      <div className="min-h-screen bg-gradient-to-r from-blue-500 via-green-400 to-purple-500 text-white p-6 flex items-center justify-center">
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded shadow-lg">
             <h2 className="text-2xl mb-4">You need to log in to continue</h2>
             <ButtonSignin text="Log In" extraStyle="btn-primary" />
           </div>
         </div>
-      )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-r from-blue-500 via-green-400 to-purple-500 text-white p-6 flex items-center justify-center">
       <div className="container mx-auto p-6 bg-white text-gray-800 shadow-lg rounded-lg max-w-2xl">
         <h1 className="text-4xl font-bold mb-6 text-center text-blue-600">Live Score Tracker</h1>
         <div className="mb-6 flex flex-col items-center">
