@@ -14,6 +14,10 @@ const links: {
   label: string;
 }[] = [
   {
+    href: "/track-score",
+    label: "Track Score",
+  },
+  {
     href: "/#pricing",
     label: "Pricing",
   },
