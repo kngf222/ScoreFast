@@ -1,35 +1,62 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["public", "auth"]
 }
 
 model Match {
-  id        Int       @id @default(autoincrement())
-  player1   String
-  player2   String
-  score1    Int
-  score2    Int
-  sets      Set[]
-  histories History[]
+  id          Int      @id @default(autoincrement())
+  team1Id     Int?
+  team2Id     Int?
+  sets        Set[]
+  userId      String   @map("user_id") // Link to UserProfile
+  user        UserProfile @relation(name: "UserMatches", fields: [userId], references: [id])
+  team1       Team?    @relation(name: "Team1", fields: [team1Id], references: [id])
+  team2       Team?    @relation(name: "Team2", fields: [team2Id], references: [id])
+  
+  @@schema("public")
 }
 
 model Set {
-  id        Int      @id @default(autoincrement())
-  matchId   Int
-  score1    Int
-  score2    Int
-  Match     Match    @relation(fields: [matchId], references: [id])
+  id      Int      @id @default(autoincrement())
+  matchId Int
+  match   Match    @relation(fields: [matchId], references: [id])
+  scores  Score[]
+
+  @@schema("public")
 }
 
-model History {
-  id        Int      @id @default(autoincrement())
-  matchId   Int
-  player    String
-  newScore  Int
-  timestamp DateTime @default(now())
-  Match     Match    @relation(fields: [matchId], references: [id])
+model Team {
+  id       Int      @id @default(autoincrement())
+  player1  String?
+  player2  String?
+  matches1 Match[]  @relation(name: "Team1")
+  matches2 Match[]  @relation(name: "Team2")
+
+  @@schema("public")
+}
+
+model Score {
+  id      Int      @id @default(autoincrement())
+  setId   Int
+  set     Set      @relation(fields: [setId], references: [id])
+  team1Score Int
+  team2Score Int
+
+  @@schema("public")
+}
+
+model UserProfile {
+  id        String   @id @default(uuid())
+  displayName String?
+  email      String?
+  created_at DateTime @default(now())
+  matches    Match[]  @relation(name: "UserMatches")
+
+  @@schema("public")
 }
