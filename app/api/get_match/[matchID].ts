@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const match = await prisma.match.findUnique({
       where: { id: parseInt(matchID as string, 10) },
-      include: { histories: true },
+      include: { histories: true, sets: true},
     });
 
     if (!match) {

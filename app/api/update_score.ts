@@ -17,7 +17,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const match = await prisma.match.findUnique({
         where: { id: parseInt(matchId, 10) },
-        include: { histories: true },
+        include: { histories: true, sets: true },
       });
 
       if (!match) {
@@ -38,6 +38,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           player,
           newScore,
         },
+      });
+      await prisma.set.update({
+        where: { id: parseInt(setId, 10) },
+        data: updateData,
       });
 
       console.log('Score updated successfully for matchId:', matchId);

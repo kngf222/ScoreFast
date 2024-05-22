@@ -11,6 +11,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         data: {
           player1,
           player2,
+          sets: {
+            create: [
+              { score1: 0, score2: 0 }, // Initial set
+            ],
+          },
           score1: 0,
           score2: 0,
         },
