@@ -1,21 +1,23 @@
 "use client";
 
-
 import { useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 
-const Home = () => {
+const TrackScore = () => {
   const [player1, setPlayer1] = useState('');
   const [player2, setPlayer2] = useState('');
+  const [player3, setPlayer3] = useState('');
+  const [player4, setPlayer4] = useState('');
   const [score1, setScore1] = useState(0);
   const [score2, setScore2] = useState(0);
   const [matchId, setMatchId] = useState<number | null>(null);
   const [matchUrl, setMatchUrl] = useState<string | null>(null);
+  const userId = 'your-user-id'; // Replace with actual user ID
 
   const startMatch = async () => {
     try {
-      const response = await axios.post('/api/start_match', { player1, player2 });
+      const response = await axios.post('/api/start_match', { player1, player2, player3, player4, userId });
       setMatchId(response.data.matchId);
       setScore1(0);
       setScore2(0);
@@ -25,16 +27,18 @@ const Home = () => {
     }
   };
 
-  const updateScore = async (player: string, newScore: number) => {
+  const updateScore = async (team: string, newScore: number) => {
     if (!matchId) {
       console.error('No matchId available');
       return;
     }
     try {
-      await axios.post('/api/update_score', { player, newScore, matchId });
-      if (player === 'player1') {
+      const setId = 1; // You need to determine the current set ID dynamically
+      if (team === 'team1') {
+        await axios.post('/api/update_score', { matchId, setId, team1Score: newScore, team2Score: score2 });
         setScore1(newScore);
       } else {
+        await axios.post('/api/update_score', { matchId, setId, team1Score: score1, team2Score: newScore });
         setScore2(newScore);
       }
     } catch (error) {
@@ -59,6 +63,20 @@ const Home = () => {
             placeholder="Player 2 Name"
             value={player2}
             onChange={(e) => setPlayer2(e.target.value)}
+            className="input input-bordered input-secondary mb-2"
+          />
+          <input
+            type="text"
+            placeholder="Player 3 Name"
+            value={player3}
+            onChange={(e) => setPlayer3(e.target.value)}
+            className="input input-bordered input-primary mb-2"
+          />
+          <input
+            type="text"
+            placeholder="Player 4 Name"
+            value={player4}
+            onChange={(e) => setPlayer4(e.target.value)}
             className="input input-bordered input-secondary mb-4"
           />
           <button onClick={startMatch} className="btn btn-primary">Start Match</button>
@@ -72,19 +90,19 @@ const Home = () => {
           <h2 className="text-2xl font-semibold mb-4 text-center text-green-600">Match Score</h2>
           <div className="flex justify-around mb-4">
             <div className="text-center">
-              <h3 className="text-xl font-semibold mb-2 text-red-600">{player1}</h3>
+              <h3 className="text-xl font-semibold mb-2 text-red-600">{player1} & {player2}</h3>
               <div className="flex items-center justify-center space-x-2">
-                <button onClick={() => updateScore('player1', score1 + 1)} className="btn btn-success">+</button>
+                <button onClick={() => updateScore('team1', score1 + 1)} className="btn btn-success">+</button>
                 <span className="text-2xl">{score1}</span>
-                <button onClick={() => updateScore('player1', score1 - 1)} className="btn btn-error">-</button>
+                <button onClick={() => updateScore('team1', score1 - 1)} className="btn btn-error">-</button>
               </div>
             </div>
             <div className="text-center">
-              <h3 className="text-xl font-semibold mb-2 text-red-600">{player2}</h3>
+              <h3 className="text-xl font-semibold mb-2 text-red-600">{player3} & {player4}</h3>
               <div className="flex items-center justify-center space-x-2">
-                <button onClick={() => updateScore('player2', score2 + 1)} className="btn btn-success">+</button>
+                <button onClick={() => updateScore('team2', score2 + 1)} className="btn btn-success">+</button>
                 <span className="text-2xl">{score2}</span>
-                <button onClick={() => updateScore('player2', score2 - 1)} className="btn btn-error">-</button>
+                <button onClick={() => updateScore('team2', score2 - 1)} className="btn btn-error">-</button>
               </div>
             </div>
           </div>
@@ -94,4 +112,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default TrackScore;
