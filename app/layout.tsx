@@ -5,6 +5,7 @@ import PlausibleProvider from "next-plausible";
 import { getSEOTags } from "@/libs/seo";
 import ClientLayout from "@/components/LayoutClient";
 import config from "@/config";
+import { SessionProvider } from "next-auth/react"; // Import SessionProvider
 import "./globals.css";
 
 const font = Inter({ subsets: ["latin"] });
@@ -29,8 +30,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </head>
       )}
       <body>
-        {/* ClientLayout contains all the client wrappers (Crisp chat support, toast messages, tooltips, etc.) */}
-        <ClientLayout>{children}</ClientLayout>
+        {/* Wrap ClientLayout with SessionProvider */}
+        <SessionProvider>
+          <ClientLayout>{children}</ClientLayout>
+        </SessionProvider>
       </body>
     </html>
   );

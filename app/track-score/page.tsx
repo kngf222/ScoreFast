@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
-import { useSession, signIn } from 'next-auth/react';
-
+import { useSession } from 'next-auth/react';
+import ButtonSignin from '@/components/ButtonSignin';
 
 const TrackScore = () => {
+  const { data: session, status } = useSession();
   const [player1, setPlayer1] = useState('');
   const [player2, setPlayer2] = useState('');
   const [player3, setPlayer3] = useState('');
@@ -15,9 +16,22 @@ const TrackScore = () => {
   const [score2, setScore2] = useState(0);
   const [matchId, setMatchId] = useState<number | null>(null);
   const [matchUrl, setMatchUrl] = useState<string | null>(null);
-  const userId = 'your-user-id'; // Replace with actual user ID
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      setShowLoginPrompt(true);
+    } else {
+      setShowLoginPrompt(false);
+    }
+  }, [status]);
 
   const startMatch = async () => {
+    if (!session || !session.user?.id) {
+      console.error('User not authenticated');
+      return;
+    }
+    const userId = session.user.id;
     try {
       const response = await axios.post('/api/match/start_match', { player1, player2, player3, player4, userId });
       setMatchId(response.data.matchId);
@@ -48,8 +62,20 @@ const TrackScore = () => {
     }
   };
 
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-500 via-green-400 to-purple-500 text-white p-6 flex items-center justify-center">
+      {showLoginPrompt && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded shadow-lg">
+            <h2 className="text-2xl mb-4">You need to log in to continue</h2>
+            <ButtonSignin text="Log In" extraStyle="btn-primary" />
+          </div>
+        </div>
+      )}
       <div className="container mx-auto p-6 bg-white text-gray-800 shadow-lg rounded-lg max-w-2xl">
         <h1 className="text-4xl font-bold mb-6 text-center text-blue-600">Live Score Tracker</h1>
         <div className="mb-6 flex flex-col items-center">
