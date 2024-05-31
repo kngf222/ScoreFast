@@ -2,8 +2,6 @@ import { ReactNode } from "react";
 import { Inter } from "next/font/google";
 import { Viewport } from "next";
 import PlausibleProvider from "next-plausible";
-import { Viewport } from "next";
-import PlausibleProvider from "next-plausible";
 import { getSEOTags } from "@/libs/seo";
 import ClientLayout from "@/components/LayoutClient";
 import SessionLayout from "@/components/SessionLayout";
@@ -14,12 +12,6 @@ const font = Inter({ subsets: ["latin"] });
 
 export const viewport: Viewport = {
   // Will use the primary color of your theme to show a nice theme color in the URL bar of supported browsers
-  themeColor: config.colors.main,
-  width: "device-width",
-  initialScale: 1,
-};
-
-export const viewport: Viewport = {
   themeColor: config.colors.main,
   width: "device-width",
   initialScale: 1,
