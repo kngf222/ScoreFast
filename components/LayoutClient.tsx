@@ -48,7 +48,7 @@ const CrispChat = (): null => {
         });
       }
     }
-  }, [pathname]);
+  }, [supabase.auth]);
 
   // Add User Unique ID to Crisp to easily identify users when reaching support (optional)
   useEffect(() => {

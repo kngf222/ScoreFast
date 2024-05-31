@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { usePathname } from 'next/navigation';
 import useSWR from 'swr';

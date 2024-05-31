@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import prisma from '../../../../libs/prismaClient';
+import prisma from '@/libs/prismaClient';
 
 export async function POST(req: Request) {
   const { matchId, setId, team1Score, team2Score } = await req.json();
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Set not found' }, { status: 404 });
     }
 
-    const newScore = await prisma.score.create({
+    await prisma.score.create({
       data: {
         setId: parseInt(setId, 10),
         team1Score,
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json({ message: 'Score updated successfully', updatedSet: set });
+    return NextResponse.json({ message: 'Score updated successfully' }, { status: 200 });
   } catch (error) {
     console.error('Failed to update score:', error);
     return NextResponse.json({ error: 'Failed to update score' }, { status: 500 });
