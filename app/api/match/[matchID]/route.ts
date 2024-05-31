@@ -1,24 +1,20 @@
 import { NextResponse } from 'next/server';
-import prisma from '../../../../libs/prismaClient';
+import prisma from '@/libs/prismaClient';
 
-export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const matchID = url.searchParams.get('matchID');
-
-  if (!matchID) {
-    return NextResponse.json({ error: 'matchId is required' }, { status: 400 });
-  }
+export async function GET(req: Request, { params }: { params: { matchID: string } }) {
+  const { matchID } = params;
 
   try {
     const match = await prisma.match.findUnique({
       where: { id: parseInt(matchID, 10) },
       include: {
-        sets: {
-          include: { scores: true },
-        },
         team1: true,
         team2: true,
-        user: true,
+        sets: {
+          include: {
+            scores: true,
+          },
+        },
       },
     });
 
@@ -26,9 +22,9 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: 'Match not found' }, { status: 404 });
     }
 
-    return NextResponse.json(match, { status: 200 });
+    return NextResponse.json(match);
   } catch (error) {
-    console.error('Failed to fetch match:', error);
-    return NextResponse.json({ error: 'Failed to fetch match' }, { status: 500 });
+    console.error('Failed to fetch match data:', error);
+    return NextResponse.json({ error: 'Failed to fetch match data' }, { status: 500 });
   }
 }

@@ -1,99 +1,78 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+// /app/match/[matchID]/page.tsx
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 interface Match {
   id: number;
-  player1: string;
-  player2: string;
-  score1: number;
-  score2: number;
-  histories: History[];
+  team1: {
+    player1: string;
+    player2: string;
+  };
+  team2: {
+    player1: string;
+    player2: string;
+  };
+  sets: {
+    id: number;
+    matchId: number;
+    scores: {
+      team1Score: number;
+      team2Score: number;
+    }[];
+  }[];
 }
 
-interface History {
-  id: number;
-  player: string;
-  newScore: number;
-  timestamp: string;
-}
-
-export default function MatchPage() {
+const MatchPage = () => {
+  const pathname = usePathname();
+  const matchID = pathname.split('/').pop();
   const [match, setMatch] = useState<Match | null>(null);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
-    const fetchMatchData = async () => {
-      if (!router.isReady) {
-        console.log('Router is not ready');
-        return;
-      }
+    const fetchMatch = async () => {
+      if (!matchID) return;
 
-      const { matchId } = router.query;
-      console.log('Router is ready');
-      console.log('router query matchId:', matchId);
-
-      if (matchId) {
-        console.log(`Fetching match data for matchId: ${matchId}`);
-        try {
-          console.log('Sending request to /api/match');
-          console.log('matchId:', matchId);
-          console.log(`/api/match/${matchId}`);
-          const response = await axios.get(`/api/match/${matchId}`);
-          console.log('Match data received:', response.data);
-          setMatch(response.data);
-        } catch (error) {
-          console.error('Failed to fetch match:', error);
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        console.log('matchId is undefined');
+      try {
+        const response = await axios.get(`/api/match/${matchID}`);
+        console.log('Fetched match data:', response.data); // Add this line to inspect data
+        setMatch(response.data);
+      } catch (error) {
+        console.error('Failed to fetch match data:', error);
       }
     };
 
-    fetchMatchData();
-  }, [router.isReady, router.query]);
+    fetchMatch();
+  }, [matchID]);
 
-  if (loading) {
-    return <div className="text-center mt-10">Loading...</div>;
-  }
-
-  if (!match) {
-    return <div className="text-center mt-10">Match not found</div>;
-  }
+  if (!match) return <div>Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white p-6 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-r from-blue-500 via-green-400 to-purple-500 text-white p-6 flex items-center justify-center">
       <div className="container mx-auto p-6 bg-white text-gray-800 shadow-lg rounded-lg max-w-2xl">
-        <h1 className="text-4xl font-bold mb-6 text-center text-purple-600">Match between {match.player1} and {match.player2}</h1>
-        <h2 className="text-2xl font-semibold mb-4 text-center text-pink-600">Score</h2>
+        <h1 className="text-4xl font-bold mb-6 text-center text-blue-600">
+          Match between {match.team1.player1} & {match.team1.player2} vs {match.team2.player1} & {match.team2.player2}
+        </h1>
+        <h2 className="text-2xl font-semibold mb-4 text-center text-green-600">Match Score</h2>
         <div className="flex justify-around mb-4">
-          <div className="text-center">
-            <h3 className="text-xl font-semibold mb-2 text-blue-600">{match.player1}</h3>
-            <div className="flex items-center justify-center space-x-2">
-              <span className="text-2xl">{match.score1}</span>
-            </div>
-          </div>
-          <div className="text-center">
-            <h3 className="text-xl font-semibold mb-2 text-blue-600">{match.player2}</h3>
-            <div className="flex items-center justify-center space-x-2">
-              <span className="text-2xl">{match.score2}</span>
-            </div>
-          </div>
+          {match.sets.map((set, index) => {
+            const latestScore = set.scores.length ? set.scores[set.scores.length - 1] : { team1Score: 0, team2Score: 0 };
+            return (
+              <div key={index} className="text-center">
+                <h3 className="text-xl font-semibold mb-2 text-red-600">Set {index + 1}</h3>
+                <div className="flex items-center justify-center space-x-2">
+                  <span className="text-2xl">{latestScore.team1Score}</span>
+                  <span className="text-2xl">-</span>
+                  <span className="text-2xl">{latestScore.team2Score}</span>
+                </div>
+              </div>
+            );
+          })}
         </div>
-        <h2 className="text-2xl font-semibold mb-4 text-center text-pink-600">Match History</h2>
-        <ul className="list-disc list-inside bg-base-100 p-4 rounded shadow-md">
-          {match.histories.map(history => (
-            <li key={history.id} className="mb-2">
-              <span className="text-blue-600">{history.player}</span> scored <span className="text-green-600">{history.newScore}</span> at {new Date(history.timestamp).toLocaleTimeString()}
-            </li>
-          ))}
-        </ul>
       </div>
     </div>
   );
-}
+};
+
+export default MatchPage;

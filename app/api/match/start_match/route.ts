@@ -6,10 +6,6 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { player1, player2, player3, player4 } = body;
 
-    if (!player1 || !player2) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
-    }
-
     const team1 = await prisma.team.create({
       data: {
         player1,
@@ -19,8 +15,8 @@ export async function POST(req: Request) {
 
     const team2 = await prisma.team.create({
       data: {
-        player1: player3,
-        player2: player4,
+        player1: player3 || '',
+        player2: player4 || '',
       },
     });
 
@@ -29,7 +25,14 @@ export async function POST(req: Request) {
         team1Id: team1.id,
         team2Id: team2.id,
         sets: {
-          create: [{}], // Create an initial set
+          create: [{
+            scores: {
+              create: [{
+                team1Score: 0,
+                team2Score: 0,
+              }],
+            },
+          }],
         },
       },
     });
