@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { headers } from "next/headers";
 import Stripe from "stripe";
-import { SupabaseClient } from "@supabase/supabase-js";
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import configFile from "@/config";
 import { findCheckoutSession } from "@/libs/stripe";
 
@@ -24,10 +24,10 @@ export async function POST(req: NextRequest) {
   let event;
 
   // Create a private supabase client using the secret service_role API key
-  const supabase = new SupabaseClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  );
+  const supabase = createRouteHandlerClient({
+    url: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    serviceKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+  });
 
   // verify Stripe event is legit
   try {
@@ -66,13 +66,6 @@ export async function POST(req: NextRequest) {
           })
           .eq("id", userId);
 
-        // Extra: send email with user link, product page, etc...
-        // try {
-        //   await sendEmail(...);
-        // } catch (e) {
-        //   console.error("Email issue:" + e?.message);
-        // }
-
         break;
       }
 
@@ -102,6 +95,7 @@ export async function POST(req: NextRequest) {
           .from("profiles")
           .update({ has_access: false })
           .eq("customer_id", subscription.customer);
+
         break;
       }
 

@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { createCheckout } from "@/libs/stripe";
 
 // This function is used to create a Stripe Checkout Session (one-time payment or subscription)
+// This function is used to create a Stripe Checkout Session (one-time payment or subscription)
 // It's called by the <ButtonCheckout /> component
 // Users must be authenticated. It will prefill the Checkout data with their email and/or credit card (if any)
 export async function POST(req: NextRequest) {
@@ -67,6 +68,7 @@ export async function POST(req: NextRequest) {
 
     const stripeSessionURL = await createCheckout({
       priceId,
+      mode,
       mode,
       successUrl,
       cancelUrl,

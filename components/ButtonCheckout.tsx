@@ -57,6 +57,7 @@ const ButtonCheckout = ({
         </svg>
       )}
       Get {config?.appName}
+      Get {config?.appName}
     </button>
   );
 };
