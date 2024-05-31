@@ -36,6 +36,7 @@
     "react-syntax-highlighter": "^15.5.0",
     "react-tooltip": "^5.26.3",
     "stripe": "^13.11.0",
+    "swr": "^2.2.5",
     "zod": "^3.22.4"
   },
   "devDependencies": {

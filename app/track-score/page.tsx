@@ -150,6 +150,7 @@ const TrackScore = () => {
   const [score2, setScore2] = useState(0);
   const [matchId, setMatchId] = useState<number | null>(null);
   const [matchUrl, setMatchUrl] = useState<string | null>(null);
+  const [setId, setSetId] = useState<number | null>(null);
 
   const startMatch = async () => {
     try {
@@ -163,18 +164,23 @@ const TrackScore = () => {
       setScore1(0);
       setScore2(0);
       setMatchUrl(`${window.location.origin}/match/${response.data.matchId}`);
+
+      // Fetch the initial set ID for the new match
+      const matchResponse = await axios.get(`/api/match/${response.data.matchId}`);
+      if (matchResponse.data.sets.length > 0) {
+        setSetId(matchResponse.data.sets[0].id);
+      }
     } catch (error) {
       console.error('Failed to start match:', error);
     }
   };
 
   const updateScore = async (team: string, newScore: number) => {
-    if (!matchId) {
-      console.error('No matchId available');
+    if (!matchId || !setId) {
+      console.error('No matchId or setId available');
       return;
     }
     try {
-      const setId = 1; // You need to determine the current set ID dynamically
       let response;
       if (team === 'team1') {
         response = await axios.post('/api/match/update_score', { matchId, setId, team1Score: newScore, team2Score: score2 });

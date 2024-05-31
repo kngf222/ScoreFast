@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Set not found' }, { status: 404 });
     }
 
-    await prisma.score.create({
+    const newScore = await prisma.score.create({
       data: {
         setId: parseInt(setId, 10),
         team1Score,
@@ -26,12 +26,7 @@ export async function POST(req: Request) {
       },
     });
 
-    const updatedSet = await prisma.set.findUnique({
-      where: { id: parseInt(setId, 10) },
-      include: { scores: true },
-    });
-
-    return NextResponse.json({ message: 'Score updated successfully', updatedSet }, { status: 200 });
+    return NextResponse.json({ message: 'Score updated successfully', updatedSet: set });
   } catch (error) {
     console.error('Failed to update score:', error);
     return NextResponse.json({ error: 'Failed to update score' }, { status: 500 });

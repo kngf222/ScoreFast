@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { usePathname } from 'next/navigation';
+import useSWR from 'swr';
 
 interface Match {
   id: number;
@@ -25,27 +26,14 @@ interface Match {
   }[];
 }
 
+const fetcher = (url: string) => axios.get(url).then(res => res.data);
+
 const MatchPage = () => {
   const pathname = usePathname();
   const matchID = pathname.split('/').pop();
-  const [match, setMatch] = useState<Match | null>(null);
+  const { data: match, error } = useSWR<Match>(matchID ? `/api/match/${matchID}` : null, fetcher, { refreshInterval: 5000 });
 
-  useEffect(() => {
-    const fetchMatch = async () => {
-      if (!matchID) return;
-
-      try {
-        const response = await axios.get(`/api/match/${matchID}`);
-        console.log('Fetched match data:', response.data); // Add this line to inspect data
-        setMatch(response.data);
-      } catch (error) {
-        console.error('Failed to fetch match data:', error);
-      }
-    };
-
-    fetchMatch();
-  }, [matchID]);
-
+  if (error) return <div>Failed to load match data</div>;
   if (!match) return <div>Loading...</div>;
 
   const latestSet = match.sets[match.sets.length - 1];
