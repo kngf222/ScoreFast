@@ -175,17 +175,20 @@ const TrackScore = () => {
     }
     try {
       const setId = 1; // You need to determine the current set ID dynamically
+      let response;
       if (team === 'team1') {
-        await axios.post('/api/match/update_score', { matchId, setId, team1Score: newScore, team2Score: score2 });
+        response = await axios.post('/api/match/update_score', { matchId, setId, team1Score: newScore, team2Score: score2 });
         setScore1(newScore);
       } else {
-        await axios.post('/api/match/update_score', { matchId, setId, team1Score: score1, team2Score: newScore });
+        response = await axios.post('/api/match/update_score', { matchId, setId, team1Score: score1, team2Score: newScore });
         setScore2(newScore);
       }
+      console.log('Updated set data:', response.data.updatedSet);
     } catch (error) {
       console.error('Failed to update score:', error);
     }
   };
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-500 via-green-400 to-purple-500 text-white p-6 flex items-center justify-center">

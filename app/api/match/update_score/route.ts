@@ -26,7 +26,12 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json({ message: 'Score updated successfully' }, { status: 200 });
+    const updatedSet = await prisma.set.findUnique({
+      where: { id: parseInt(setId, 10) },
+      include: { scores: true },
+    });
+
+    return NextResponse.json({ message: 'Score updated successfully', updatedSet }, { status: 200 });
   } catch (error) {
     console.error('Failed to update score:', error);
     return NextResponse.json({ error: 'Failed to update score' }, { status: 500 });
