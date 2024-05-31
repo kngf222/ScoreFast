@@ -13,7 +13,6 @@ import config from "@/config";
 // This component is separated from ClientLayout because it needs to be wrapped with <SessionProvider> to use useSession() hook
 const CrispChat = (): null => {
   const pathname = usePathname();
-
   const supabase = createClientComponentClient();
   const [data, setData] = useState(null);
 
@@ -29,7 +28,7 @@ const CrispChat = (): null => {
       }
     };
     getUser();
-  }, []);
+  }, [supabase.auth]);
 
   useEffect(() => {
     if (config?.crisp?.id) {
@@ -48,7 +47,7 @@ const CrispChat = (): null => {
         });
       }
     }
-  }, [supabase.auth]);
+  }, [pathname]);
 
   // Add User Unique ID to Crisp to easily identify users when reaching support (optional)
   useEffect(() => {
